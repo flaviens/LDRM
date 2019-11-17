@@ -46,11 +46,11 @@ app.get('/hazard', function(req, res) {
 });  
 
 app.post('/report', async function(req, res) {
-	console.log(req.body)
+	// console.log(req.body)
 	
 	coords = await getCoordinates(req.body.address)
 	coords = JSON.parse(coords)
-	console.log(coords[0])
+	// console.log(coords[0])
 	longitude = parseFloat(coords[0].lon)
 	latitude = parseFloat(coords[0].lat)
 
@@ -76,30 +76,31 @@ app.post('/report', async function(req, res) {
 	if (typeof req.body["comment"] !== 'undefined') {
 		comment = req.body.comment
 	}
-	if (typeof req.body["image"] !== 'undefined') {
-		image += req.body.image
+	if (typeof req.body["photo"] !== 'undefined') {
+		image += req.body.photo
 	} else {
 		image += "red.jpg"
 	}
 	var image_rating = await rate_image(image);
-	console.log("Image rating")
-	console.log(image_rating)
-	await addToDatabase(req.body.fullname, req.body.address, comment, longitude, latitude, image, image_rating, haswater, haselectricity)
-  	res.render('success', {username: req.body.fullname});
-});
+	image_rating = JSON.parse(image_rating);
+	// console.log(image_rating.class)
+	await addToDatabase(req.body.fullname, req.body.address, comment, longitude, latitude, image, image_rating.class, image_rating.score, haswater, haselectricity)
 
+	// console.log(coords[0])
+  	res.render('success', {username: req.body.fullname, image_class: image_rating.class, image_confidence: image_rating.score, display_address: coords[0].display_name});
+});
 
 
 app.listen(PORT, function() {
     console.log('Server is running on PORT:',PORT);
 });
 
-function addToDatabase(fullname, address, comment, longitude, latitude, image, image_rating, has_water, has_electricity) {
+function addToDatabase(fullname, address, comment, longitude, latitude, image, image_rating_class, image_rating_confidence, has_water, has_electricity) {
   // open database in memory
   let db = new sqlite3.Database('./base.db');
  
   // insert one row into the langs table
-  db.run(`INSERT INTO HOUSES VALUES(NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [fullname, address, comment, longitude, latitude, image, image_rating, has_water, has_electricity], function(err) {
+  db.run(`INSERT INTO HOUSES VALUES(NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [fullname, address, comment, longitude, latitude, image, image_rating_class, image_rating_confidence, has_water, has_electricity], function(err) {
     if (err) {
       return console.log(err.message);
     }
@@ -112,7 +113,22 @@ function addToDatabase(fullname, address, comment, longitude, latitude, image, i
 }
 
 function getAllCoordinatesFromDatabase() {
-  // TODO
+	let db = new sqlite3.Database('./db/chinook.db');
+ 
+	let sql = "SELECT longitude, latitude FROM HOUSES";
+	
+	db.all(sql, [], (err, rows) => {
+	if (err) {
+		throw err;
+	}
+	rows.forEach((row) => {
+		console.log(row.name);
+	});
+	});
+	
+	// close the database connection
+	db.close();
+  
 }
 
 async function getCoordinates(address) {
