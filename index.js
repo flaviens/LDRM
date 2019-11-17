@@ -44,10 +44,7 @@ app.get('/index', function(req, res) {
 app.get('/hazard', async function(req, res) {
 	rows = await getAllCoordinatesFromDatabase()
 
-	console.log("Rows:")
-	console.log(rows)
-
-	res.render('hazard', {coordinates: {RED: [], YELLOW: [], GREEN: []}});
+	res.render('hazard', {greens: rows.GREEN, yellows: rows.YELLOW, reds: rows.RED});
 });  
 
 app.post('/report', async function(req, res) {
