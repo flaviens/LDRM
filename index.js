@@ -226,7 +226,7 @@ async function getAllCoordinatesFromDatabase() {
 		ret = {GREEN: [], YELLOW: [], RED: []}
 
 		for (var entry in response_body) {
-			console.log(response_body[entry])
+			// console.log(response_body[entry])
 			if (response_body[entry].image_class == 'Green') {
 				ret.GREEN.push({x: response_body[entry].longitude, y: response_body[entry].latitude})
 			} else if (response_body[entry].image_class == 'Yellow') {

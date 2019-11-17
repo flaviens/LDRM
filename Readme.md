@@ -6,7 +6,11 @@
 
 ### Creating and populating the data
 
+First, the database has to be cleared to make sure that it contains no old unwanted data. It can be populated with data that is respectively present in the Green.csv, Yellow.csv and Red.csv files.
+
 ```python3
+# This requires a Python 3 installation.
+
 python3 clear_db
 python3 create_db
 python3 populate_db # To populate the database with the test scenario
@@ -51,3 +55,5 @@ Once the user has entered data, for usage ease:
 * The address is sent to the LocationIQ API to get the coordinates.
 
 Then, some feedback is provided, and the data is added to the global map.
+
+**To use the map**, first press the respective button to load the data, then press the button to display them.
