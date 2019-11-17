@@ -221,7 +221,7 @@ async function getAllCoordinatesFromDatabase() {
 		let response_body = await rows_promise;
 
 		// holds response from server that is passed when Promise is resolved
-		console.log("First")
+		// console.log("First")
 
 		ret = {GREEN: [], YELLOW: [], RED: []}
 
@@ -250,7 +250,7 @@ async function getRowsPromise() {
 	return new Promise((resolve, reject) => {
 		let db = new sqlite3.Database('./base.db');
  
-		let sql = "SELECT image_class, longitude, latitude FROM HOUSES GROUP BY address";
+		let sql = "SELECT image_class, longitude, latitude FROM HOUSES";
 
 		db.all(sql, [], (err, rows) => {
 			if (err) {
