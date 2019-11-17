@@ -6,7 +6,20 @@ var hbs = require('express-hbs');
 var path = require('path');
 var querystring = require('querystring');
 const sqlite3 = require('sqlite3').verbose();
- 
+var fs = require('fs');
+
+var VisualRecognitionV3 = require('watson-developer-cloud/visual-recognition/v3');
+
+var visualRecognition = new VisualRecognitionV3({
+	version: '2019-11-17',
+	iam_apikey: 'ThQOWETYg4cg7kpE-xTEfoHVbh627RxdDCNs5YrZxCAG'
+});
+
+// For the image classifier
+var classifier_ids = ["BuildingHazardClassifier_1958782173"];
+var threshold = 0.6;
+
+
 const API_TOKEN = "9679aac1707833";
 
 app.use(bodyParser.urlencoded({ extended: false }));

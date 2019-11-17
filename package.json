@@ -7,5 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Flavien Thea Andrea Yuerong",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "watson-developer-cloud": "^4.0.1"
+  }
 }
