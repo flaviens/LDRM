@@ -5,7 +5,7 @@
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Damage report</title>
+	<title>Contact Form - Free Bulma template</title>
 	<link rel="shortcut icon" href="../images/fav_icon.png" type="image/x-icon">
 	<!-- Bulma Version 0.8.x-->
 	<link rel="stylesheet" href="https://unpkg.com/bulma@0.8.0/css/bulma.min.css" />
@@ -30,8 +30,8 @@
 			</div>
 			<div id="navbarMenu" class="navbar-menu">
 				<div class="navbar-end">
-					<a class="navbar-item is-active">Home</a>
-					<a class="navbar-item" href="/hazard">Hazard maps</a>
+					<a class="navbar-item" href="/index">Home</a>
+					<a class="navbar-item is-active">Hazard maps</a>
 					{{!-- <a class="navbar-item">Features</a>
 					<a class="navbar-item">Team</a>
 					<a class="navbar-item">Archives</a>
@@ -55,55 +55,21 @@
 		<div class="hero-body">
 			<div class="container has-text-centered">
 				<div class="columns is-8 is-variable ">
+					<div class="column is-two-thirds has-text-left">
+
+						<p>Placeholder for the map</p>
+
+					</div>
 					<div class="column is-one-third has-text-left">
-						<h1 class="title is-1">Report damage</h1>
-						<p class="is-size-4">Reporting home damage provides very helpful data to helpers and organizations.</p>
+						<h1 class="title is-1">Hazard maps</h1>
+						<p class="is-size-4">Hazard maps of the region.</p>
 						<div class="social-media">
 							<a href="https://facebook.com" target="_blank" class="button is-light is-large"><i class="fa fa-facebook-square" aria-hidden="true"></i></a>
 							<a href="https://instagram.com" target="_blank" class="button is-light is-large"><i class="fa fa-instagram" aria-hidden="true"></i></a>
 							<a href="https://twitter.com" target="_blank" class="button is-light is-large"><i class="fa fa-twitter" aria-hidden="true"></i></a>
 						</div>
 					</div>
-					<div class="column is-two-thirds has-text-left">
-                        <form action="/report" method="post">
-                            <div class="field">
-                                <label class="label">Full name</label>
-                                <div class="control">
-                                    <input class="input is-medium" type="text" name="fullname" required="true">
-                                </div>
-                            </div>
-                            <div class="field">
-                                <label class="label">Address</label>
-                                <div class="control">
-                                    <input class="input is-medium" type="text" name="address" required="true">
-                                </div>
-                            </div>
-                            <div class="field">
-                                <label class="label">Comment</label>
-                                <div class="control">
-                                    <textarea class="textarea is-medium"></textarea>
-                                </div>
-                            </div>
-							<div class="field">
-								<div class="file">
-								<label class="file-label">
-									<input class="file-input" type="file" name="photo">
-									<span class="file-cta">
-									<span class="file-icon">
-										<i class="fa fa-upload"></i>
-									</span>
-									<span class="file-label">
-										Choose a picture...
-									</span>
-									</span>
-								</label>
-								</div>
-							</div>
-                            <div class="control">
-                                <button type="submit" class="button is-link is-fullwidth has-text-weight-medium is-medium">Submit</button>
-                            </div>
-                        </form>
-					</div>
+
 				</div>
 			</div>
 		</div>

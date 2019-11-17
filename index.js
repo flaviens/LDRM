@@ -5,8 +5,8 @@ var bodyParser = require("body-parser");
 var hbs = require('express-hbs');
 var path = require('path');
 var querystring = require('querystring');
-
-// const API_TOKEN = "AIzaSyACsj1e4lw8nymV4HjdI_LFPlk7SNIwaT4";
+const sqlite3 = require('sqlite3').verbose();
+ 
 const API_TOKEN = "9679aac1707833";
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -23,19 +23,50 @@ var PORT = 8080;
 
 app.get('/', async function(req, res) {
     const coords = await getCoordinates();
-    res.end(coords);
-    // res.render('index');
+    // res.end(coords);
+    res.render('index');
 });
 
+app.get('/index', async function(req, res) {
+    const coords = await getCoordinates();
+    // res.end(coords);
+    res.render('index');
+});
+
+app.get('/hazard', function(req, res) {
+	res.render('hazard', {coordinates: {RED: [], YELLOW: [], GREEN: []}});
+});  
+
 app.post('/report', function(req, res) {
+	console.log(req.body)
   res.render('success', {username: req.body.fullname});
 });
+
+
 
 app.listen(PORT, function() {
     console.log('Server is running on PORT:',PORT);
 });
 
 function addToDatabase(fullname, address, ratingFromChatbot, image) {
+  // open database in memory
+	let db = new sqlite3.Database(':memory:', (err) => {
+		if (err) {
+		return console.error(err.message);
+		}
+		console.log('Connected to the in-memory SQlite database.');
+	});
+	
+	// close the database connection
+	db.close((err) => {
+		if (err) {
+		return console.error(err.message);
+		}
+		console.log('Close the database connection.');
+	});
+}
+
+function getAllCoordinatesFromDatabase() {
   
 }
 
@@ -54,24 +85,24 @@ async function getCoordinates() {
 }
 
 async function getCoordinatePromise(address) {
-	const params = {
-		key: API_TOKEN,
-		q: address,
-		format: 'json'
-	}
-	const get_request_args = await querystring.stringify(params);
-	const options = {
-		url: "https://us1.locationiq.com",
-		// port: 443,
-		// headers : {
-		// 		'Content-Type': 'application/x-www-form-urlencoded'
-		// 	},
-		path: "" + get_request_args,
+	// const params = {
+	// 	key: API_TOKEN,
+	// 	q: address,
+	// 	format: 'json'
+	// }
+	// const get_request_args = await querystring.stringify(params);
+	// const options = {
+	// 	url: "https://eu1.locationiq.com",
+	// 	// port: 443,
+	// 	// headers : {
+	// 	// 		'Content-Type': 'application/x-www-form-urlencoded'
+	// 	// 	},
+	// 	path: "" + get_request_args,
 
-	}
-	console.log(options.path)
+	// }
+	// console.log(options.path)
 	return new Promise((resolve, reject) => {
-		https.get("https://us1.locationiq.com/v1/search.php?"+get_request_args, (response) => {
+		https.get("https://eu1.locationiq.com/v1/search.php?"+get_request_args, (response) => {
 			let chunks_of_data = [];
 
 			response.on('data', (fragments) => {
