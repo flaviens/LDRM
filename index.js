@@ -41,7 +41,12 @@ app.get('/index', function(req, res) {
     res.render('index');
 });
 
-app.get('/hazard', function(req, res) {
+app.get('/hazard', async function(req, res) {
+	rows = await getAllCoordinatesFromDatabase()
+
+	console.log("Rows:")
+	console.log(rows)
+
 	res.render('hazard', {coordinates: {RED: [], YELLOW: [], GREEN: []}});
 });  
 
@@ -110,25 +115,6 @@ function addToDatabase(fullname, address, comment, longitude, latitude, image, i
  
   // close the database connection
   db.close();
-}
-
-function getAllCoordinatesFromDatabase() {
-	let db = new sqlite3.Database('./db/chinook.db');
- 
-	let sql = "SELECT longitude, latitude FROM HOUSES";
-	
-	db.all(sql, [], (err, rows) => {
-	if (err) {
-		throw err;
-	}
-	rows.forEach((row) => {
-		console.log(row.name);
-	});
-	});
-	
-	// close the database connection
-	db.close();
-  
 }
 
 async function getCoordinates(address) {
@@ -228,6 +214,57 @@ async function getRatePromise(image) {
 				resolve(JSON.stringify(response.images[0].classifiers[0].classes[0]))
 			}
 		});
+	});
+
+}
+
+async function getAllCoordinatesFromDatabase() {
+	try {
+		let rows_promise = getRowsPromise();
+		let response_body = await rows_promise;
+
+		// holds response from server that is passed when Promise is resolved
+		console.log("First")
+
+		ret = {GREEN: [], YELLOW: [], RED: []}
+
+		for (var entry in response_body) {
+			console.log(response_body[entry])
+			if (response_body[entry].image_class == 'Green') {
+				ret.GREEN.push({x: response_body[entry].longitude, y: response_body[entry].latitude})
+			} else if (response_body[entry].image_class == 'Yellow') {
+				ret.YELLOW.push({x: response_body[entry].longitude, y: response_body[entry].latitude})
+			} else {
+				ret.RED.push({x: response_body[entry].longitude, y: response_body[entry].latitude})
+			}
+		}
+
+		return ret;
+	}
+	catch(error) {
+		// Promise rejected
+		console.log("Rows rejected")
+
+		return {RED: [], YELLOW: [], GREEN: []}
+	}
+}
+
+async function getRowsPromise() {
+	return new Promise((resolve, reject) => {
+		let db = new sqlite3.Database('./base.db');
+ 
+		let sql = "SELECT image_class, longitude, latitude FROM HOUSES GROUP BY address";
+
+		db.all(sql, [], (err, rows) => {
+			if (err) {
+				console.log(err)
+				reject(err);
+			} else {
+			resolve(rows)
+			}
+		});
+		
+		db.close();
 	});
 
 }
